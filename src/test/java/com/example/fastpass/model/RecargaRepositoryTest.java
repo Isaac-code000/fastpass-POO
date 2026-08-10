@@ -1,12 +1,12 @@
-package com.example.fastpass.repository;
+package com.example.fastpass.model;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.example.fastpass.model.Pix;
-import com.example.fastpass.model.Recarga;
-import com.example.fastpass.model.StatusRecarga;
 import java.time.LocalDate;
+
+import com.example.fastpass.repository.PagamentoRepository;
+import com.example.fastpass.repository.RecargaRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
