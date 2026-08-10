@@ -16,7 +16,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
  * no application-test.properties do grupo). Não depende do Docker/Postgres.
  */
 @DataJpaTest
-class RecargaRepositoryTest {
+class   RecargaRepositoryTest {
 
     @Autowired
     private RecargaRepository recargaRepository;
