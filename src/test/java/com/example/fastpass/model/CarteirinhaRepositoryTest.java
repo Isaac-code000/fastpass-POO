@@ -18,7 +18,7 @@ public class CarteirinhaRepositoryTest {
     @Test
     public void testarCarteirinha() {
         Carteirinha carteirinha = new Carteirinha();
-        // Se a sua classe tiver setters (ex: carteirinha.setNumero("123")), coloque aqui
+        
         
         assertThat(carteirinhaRepository).isNotNull();
     }
