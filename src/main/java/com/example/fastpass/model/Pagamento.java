@@ -1,5 +1,6 @@
 package com.example.fastpass.model;
 
+import com.example.fastpass.exception.ValorInvalidoException;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,10 +14,6 @@ import jakarta.persistence.InheritanceType;
  * @Inheritance(strategy = JOINED) diz ao Hibernate para criar uma tabela
  * "pagamento" com os campos comuns (id, valor) e uma tabela separada para
  * cada subclasse (pix, debito) contendo só os campos específicos delas.
- * As tabelas filhas se ligam à tabela pai pelo id (chave estrangeira).
- *
- * Sem essa anotação, o Hibernate não sabe como organizar as tabelas quando
- * uma entidade tem subclasses concretas.
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -33,6 +30,9 @@ public abstract class Pagamento {
     }
 
     protected Pagamento(double valor) {
+        if (valor <= 0) {
+            throw new ValorInvalidoException("O valor do pagamento deve ser maior que zero: " + valor);
+        }
         this.valor = valor;
     }
 
