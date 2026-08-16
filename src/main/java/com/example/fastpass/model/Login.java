@@ -23,7 +23,6 @@ public class Login {
         this.tentativasFalhas = 0;
         this.bloqueado = false;
     }
-
     public boolean validarSenha(String senhaDigitada) {
         if (this.bloqueado) {
             throw new LoginBloqueadoException(this.apelido);
