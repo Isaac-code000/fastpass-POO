@@ -1,4 +1,4 @@
-package com.example.fastpass.model;
+package com.example.fastpass.service;
 
 import com.example.fastpass.model.Pagamento;
 import com.example.fastpass.repository.PagamentoRepository;
@@ -17,7 +17,6 @@ public class PagamentoService {
      * Processa (simula) o pagamento e persiste o registro, independente do
      * resultado — assim fica registrado tanto o pagamento aprovado quanto o
      * recusado.
-     *
      * A validação de valor <= 0 já acontece no construtor da entidade
      * Pagamento (lança ValorInvalidoException antes mesmo de chegar aqui).
      */

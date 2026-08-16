@@ -3,9 +3,8 @@ package com.example.fastpass.model;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
-import com.example.fastpass.model.Pagamento;
-import com.example.fastpass.model.Pix;
 import com.example.fastpass.repository.PagamentoRepository;
+import com.example.fastpass.service.PagamentoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

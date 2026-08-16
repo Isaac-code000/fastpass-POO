@@ -1,4 +1,4 @@
-package com.example.fastpass.model;
+package com.example.fastpass.service;
 
 import com.example.fastpass.exception.RecargaNaoEncontradaException;
 import com.example.fastpass.model.Recarga;

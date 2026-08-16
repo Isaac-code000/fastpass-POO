@@ -1,10 +1,10 @@
-package com.example.fastpass.model;
+package com.example.fastpass.facade;
 
 import com.example.fastpass.exception.PagamentoRecusadoException;
 import com.example.fastpass.model.Pagamento;
+import com.example.fastpass.service.PagamentoService;
 import com.example.fastpass.model.Recarga;
-import com.example.fastpass.model.PagamentoService;
-import com.example.fastpass.model.RecargaService;
+import com.example.fastpass.service.RecargaService;
 import org.springframework.stereotype.Component;
 
 @Component

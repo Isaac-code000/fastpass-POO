@@ -4,9 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.example.fastpass.exception.PagamentoRecusadoException;
-import com.example.fastpass.model.Pix;
-import com.example.fastpass.model.Recarga;
-import com.example.fastpass.model.StatusRecarga;
+import com.example.fastpass.facade.RecargaFacade;
+
 import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
