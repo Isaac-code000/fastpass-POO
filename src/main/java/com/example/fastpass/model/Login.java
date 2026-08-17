@@ -1,4 +1,6 @@
 package com.example.fastpass.model;
+
+import com.example.fastpass.exception.LoginBloqueadoException;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,8 +15,6 @@ public class Login {
     private int tentativasFalhas;
     private boolean bloqueado;
 
-    // Construtor vazio: o Hibernate precisa um construtor sem argumentos
-    // para conseguir instanciar a classe ao ler dados do banco.
     public Login() {}
 
     public Login(String apelido, String senha) {
@@ -23,8 +23,24 @@ public class Login {
         this.tentativasFalhas = 0;
         this.bloqueado = false;
     }
+    public boolean validarSenha(String senhaDigitada) {
+        if (this.bloqueado) {
+            throw new LoginBloqueadoException(this.apelido);
+        }
 
-    // Getters e setters
+        boolean correta = this.senha.equals(senhaDigitada);
+
+        if (correta) {
+            this.tentativasFalhas = 0; // zera o contador em caso de sucesso
+        } else {
+            this.tentativasFalhas++;
+            if (this.tentativasFalhas >= 5) {
+                this.bloqueado = true;
+            }
+        }
+        return correta;
+    }
+
     public Long getId() { return id; }
 
     public String getApelido() { return apelido; }
@@ -34,9 +50,6 @@ public class Login {
     public void setSenha(String senha) { this.senha = senha; }
 
     public int getTentativasFalhas() { return tentativasFalhas; }
-    public void setTentativasFalhas(int t) { this.tentativasFalhas = t; }
 
     public boolean isBloqueado() { return bloqueado; }
-    public void setBloqueado(boolean bloqueado) { this.bloqueado = bloqueado; }
-
 }
