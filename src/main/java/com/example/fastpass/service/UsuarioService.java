@@ -35,4 +35,9 @@ public class UsuarioService {
                 .findFirst()
                 .orElseThrow(() -> new UsuarioNaoEncontradoException(apelido));
     }
+
+    public Usuario buscarPorId(Long id) {
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new UsuarioNaoEncontradoException(id));
+    }
 }

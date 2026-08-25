@@ -1,7 +1,6 @@
 package com.example.fastpass.model;
 
 import java.time.LocalDate;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -12,32 +11,33 @@ public class Carteirinha {
 	private String instituicao;
 	private LocalDate validade;
 	private String matricula;
+	private String curso;
 
-	// 1. CONSTRUTOR VAZIO
+	@ManyToOne
+	@JoinColumn(name = "usuario_id")
+	private Usuario usuario;
+
 	public Carteirinha() {
 	}
 
-	// 2. CONSTRUTOR COM PARÂMETROS
-	public Carteirinha(String matricula, String instituicao, LocalDate validade) {
+	public Carteirinha(String matricula, String instituicao, String curso, LocalDate validade, Usuario usuario) {
 		this.matricula = matricula;
 		this.instituicao = instituicao;
+		this.curso = curso;
 		this.validade = validade;
+		this.usuario = usuario;
 	}
 
 	public boolean validar() {
 		if (this.validade == null) {
-			return false; 
+			return false;
 		}
-
-		
 		return !this.validade.isBefore(LocalDate.now());
 	}
 
 	public void renovar(LocalDate novaValidade) {
 		this.validade = novaValidade;
 	}
-
-	// Getters and Setters
 
 	public Long getId() {
 		return id;
@@ -71,4 +71,19 @@ public class Carteirinha {
 		this.matricula = matricula;
 	}
 
+	public String getCurso() {
+		return curso;
+	}
+
+	public void setCurso(String curso) {
+		this.curso = curso;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
 }

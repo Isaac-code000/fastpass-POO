@@ -2,10 +2,9 @@ package com.example.fastpass.controller;
 
 import com.example.fastpass.dto.HorarioResponse;
 import com.example.fastpass.dto.LinhaResponse;
+import com.example.fastpass.model.Linha;
 import com.example.fastpass.service.LinhaService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,10 +25,11 @@ public class LinhaController {
                 .toList();
     }
 
-    // Bate com GET /linhas/{id}/horarios do contrato de API.
-    // Se o id não existir, LinhaService já lança LinhaNaoEncontradaException,
-    // que o GlobalExceptionHandler transforma em 404 automaticamente —
-    // não precisa tratar erro aqui dentro do Controller.
+    @PostMapping("/linhas")
+    public LinhaResponse criar(@RequestBody Linha linha) {
+        return new LinhaResponse(linhaService.salvar(linha));
+    }
+
     @GetMapping("/linhas/{id}/horarios")
     public List<HorarioResponse> listarHorarios(@PathVariable Long id) {
         return linhaService.listarHorarios(id).stream()

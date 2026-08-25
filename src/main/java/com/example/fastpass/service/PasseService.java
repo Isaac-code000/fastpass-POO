@@ -2,6 +2,7 @@ package com.example.fastpass.service;
 
 import org.springframework.stereotype.Service;
 import com.example.fastpass.model.Passe;
+import com.example.fastpass.model.Usuario;
 import com.example.fastpass.repository.PasseRepository;
 import com.example.fastpass.exception.PasseNaoEncontradoException;
 import com.example.fastpass.exception.PasseVencidoException;
@@ -20,21 +21,25 @@ public class PasseService {
                 .orElseThrow(() -> new PasseNaoEncontradoException("Passe não encontrado com o ID: " + id));
     }
 
+    // Usado pela Home do app logo após o login, pra descobrir o passe
+    // do usuário autenticado sem precisar adivinhar o id dele.
+    public Passe consultarPassePorUsuario(Usuario usuario) {
+        return passeRepository.findByUsuario(usuario)
+                .orElseThrow(() -> new PasseNaoEncontradoException("Usuário ainda não possui passe cadastrado."));
+    }
+
     public Passe debitarSaldo(Long id, double valor) {
         Passe passe = consultarPasse(id);
 
-        // Verifica se o passe está válido (ativo e dentro da validade)
         if (!passe.validar()) {
             throw new PasseVencidoException("Não foi possível debitar: o passe está inativo ou vencido.");
         }
 
-        // Tenta debitar usando o próprio método da entidade Passe
         boolean debitoComSucesso = passe.debitar(valor);
         if (!debitoComSucesso) {
             throw new IllegalArgumentException("Saldo insuficiente ou valor inválido para débito.");
         }
 
-        // Salva e retorna o passe atualizado no banco de dados
         return passeRepository.save(passe);
     }
 
@@ -42,7 +47,6 @@ public class PasseService {
         if (passe == null) {
             return false;
         }
-        // Só permite recarregar se o passe estiver válido
         return passe.validar();
     }
 }

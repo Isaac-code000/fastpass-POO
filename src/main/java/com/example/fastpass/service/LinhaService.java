@@ -30,4 +30,9 @@ public class LinhaService {
         Linha linha = buscarPorId(linhaId);
         return linha.getHorarios();
     }
+
+    public Linha salvar(Linha linha) {
+        return linhaRepository.save(linha);
+    }
+
 }
