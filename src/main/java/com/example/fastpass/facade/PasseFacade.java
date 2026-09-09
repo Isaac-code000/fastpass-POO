@@ -26,7 +26,7 @@ public class PasseFacade {
 
         
         if (TipoPasse.ESTUDANTIL.equals(passe.getTipo())) {
-            if (carteirinha == null || !carteirinhaService.isValidaParaTarifaEstudantil(carteirinha)) {
+            if (carteirinha == null || !carteirinhaService.validarParaTarifaEstudantil(carteirinha)) {
                 throw new CarteirinhaInvalidaException("Uso negado: Carteirinha estudantil inválida ou inexistente.");
             }
         }

@@ -9,6 +9,12 @@ import com.example.fastpass.model.Carteirinha;
 import com.example.fastpass.model.Usuario;
 import com.example.fastpass.service.CarteirinhaService;
 import com.example.fastpass.service.UsuarioService;
+import com.example.fastpass.dto.CarteirinhaRequest;
+import org.springframework.http.HttpStatus;
+import com.example.fastpass.service.PasseService;
+import com.example.fastpass.model.Passe;
+import com.example.fastpass.model.TipoPasse;
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/carteirinhas")
@@ -19,6 +25,9 @@ public class CarteirinhaController {
 
     @Autowired
     private UsuarioService usuarioService;
+
+    @Autowired
+    private PasseService passeService;
 
     @GetMapping("/{id}")
     public ResponseEntity<CarteirinhaResponse> buscarPorId(@PathVariable Long id) {
@@ -35,4 +44,26 @@ public class CarteirinhaController {
         Carteirinha carteirinha = carteirinhaService.consultarPorUsuario(usuario);
         return ResponseEntity.ok(new CarteirinhaResponse(carteirinha));
     }
-}
+
+    @PostMapping
+    public ResponseEntity<CarteirinhaResponse> cadastrar(
+            @RequestBody CarteirinhaRequest request) {
+
+        Usuario usuario = usuarioService.buscarPorId(request.usuarioId());
+
+        LocalDate validade = LocalDate.now().plusYears(1);
+
+        Carteirinha carteirinha = new Carteirinha(
+                request.matricula(),
+                request.instituicao(),
+                request.curso(),
+                validade,
+                usuario
+        );
+
+        carteirinha = carteirinhaService.salvar(carteirinha);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(new CarteirinhaResponse(carteirinha));
+    }}

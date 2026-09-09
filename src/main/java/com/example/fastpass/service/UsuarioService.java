@@ -17,8 +17,8 @@ public class UsuarioService {
     }
 
     public Usuario cadastrar(String nome, String email, String cpf, String apelido, String senha) {
-        boolean apelidoExiste = usuarioRepository.findAll().stream()
-                .anyMatch(u -> u.getLogin().getApelido().equals(apelido));
+        // Correção: Agora o banco faz a busca rápida e segura
+        boolean apelidoExiste = usuarioRepository.findByLoginApelido(apelido).isPresent();
 
         if (apelidoExiste) {
             throw new ApelidoJaCadastradoException(apelido);
@@ -30,9 +30,8 @@ public class UsuarioService {
     }
 
     public Usuario buscarPorApelido(String apelido) {
-        return usuarioRepository.findAll().stream()
-                .filter(u -> u.getLogin().getApelido().equals(apelido))
-                .findFirst()
+        // Correção: Busca otimizada sem carregar toda a tabela na memória
+        return usuarioRepository.findByLoginApelido(apelido)
                 .orElseThrow(() -> new UsuarioNaoEncontradoException(apelido));
     }
 

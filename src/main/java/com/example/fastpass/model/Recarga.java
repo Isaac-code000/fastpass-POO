@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDate;
+import jakarta.persistence.ManyToOne;
 
 /**
  * Representa o evento de recarregar o passe. Toda recarga é feita através
@@ -33,8 +34,20 @@ public class Recarga {
     @JoinColumn(name = "pagamento_id")
     private Pagamento pagamento;
 
+    @ManyToOne
+    @JoinColumn(name = "passe_id")
+    private Passe passe;
+
     protected Recarga() {
         // construtor padrão exigido pelo JPA
+    }
+
+    public Recarga(double valor, LocalDate data, Pagamento pagamento, Passe passe) {
+        this.valor = valor;
+        this.data = data;
+        this.pagamento = pagamento;
+        this.passe = passe;
+        this.status = StatusRecarga.PENDENTE;
     }
 
     public Recarga(double valor, LocalDate data, Pagamento pagamento) {
@@ -75,5 +88,9 @@ public class Recarga {
 
     public Pagamento getPagamento() {
         return pagamento;
+    }
+
+    public Passe getPasse() {
+        return passe;
     }
 }

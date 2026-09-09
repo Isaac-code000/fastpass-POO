@@ -18,8 +18,7 @@ public class Debito extends Pagamento {
 
     @Override
     public boolean processarPagamento() {
-        // Pagamento via cartão de Débito simulado.
-        return getValor() > 0 && desconto >= 0;
+        return getValor() > 0;
     }
 
     public double getDesconto() {

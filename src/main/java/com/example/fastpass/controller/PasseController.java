@@ -34,4 +34,10 @@ public class PasseController {
         Passe passe = passeService.consultarPassePorUsuario(usuario);
         return ResponseEntity.ok(new PasseResponse(passe));
     }
+    @PostMapping("/{id}/utilizar")
+    public ResponseEntity<PasseResponse> utilizar(@PathVariable Long id) {
+        Passe passe = passeService.utilizarPasse(id);
+
+        return ResponseEntity.ok(new PasseResponse(passe));
+    }
 }

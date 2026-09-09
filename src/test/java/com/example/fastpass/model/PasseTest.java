@@ -10,8 +10,10 @@ class PasseTest {
     @Test
     @DisplayName("Deve debitar o valor do saldo com sucesso quando houver saldo suficiente")
     void deveDebitarSaldoComSucesso() {
-        // Cenário: Passe com saldo de R$ 20.00
-        Passe passe = new Passe(20.0, LocalDate.now().plusDays(30), StatusPasse.ATIVO, TipoPasse.ESTUDANTIL);
+        Usuario usuarioMock = new Usuario(); // Instancia o usuário necessário para a relação
+
+        // Cenário: Passe com saldo de R$ 20.00 (Adicionado usuarioMock no final)
+        Passe passe = new Passe(20.0, LocalDate.now().plusDays(30), StatusPasse.ATIVO, TipoPasse.ESTUDANTIL, usuarioMock);
 
         // Ação: Debitar R$ 5.00
         boolean resultado = passe.debitar(5.0);
@@ -24,8 +26,10 @@ class PasseTest {
     @Test
     @DisplayName("Não deve debitar quando o valor for maior que o saldo disponível")
     void naoDeveDebitarQuandoSaldoForInsuficiente() {
-        // Cenário: Passe com apenas R$ 3.00 de saldo
-        Passe passe = new Passe(3.0, LocalDate.now().plusDays(30), StatusPasse.ATIVO, TipoPasse.ESTUDANTIL);
+        Usuario usuarioMock = new Usuario(); // Instancia o usuário necessário para a relação
+
+        // Cenário: Passe com apenas R$ 3.00 de saldo (Adicionado usuarioMock no final)
+        Passe passe = new Passe(3.0, LocalDate.now().plusDays(30), StatusPasse.ATIVO, TipoPasse.ESTUDANTIL, usuarioMock);
 
         // Ação: Tentar debitar R$ 5.00
         boolean resultado = passe.debitar(5.0);

@@ -25,6 +25,10 @@ public class CarteirinhaService {
                 .orElseThrow(() -> new CarteirinhaNaoEncontradaException("Usuário não possui carteirinha estudantil cadastrada."));
     }
 
+    public Carteirinha salvar(Carteirinha carteirinha) {
+        return carteirinhaRepository.save(carteirinha);
+    }
+
     public boolean validarParaTarifaEstudantil(Carteirinha carteirinha) {
         return carteirinha != null && carteirinha.validar();
     }

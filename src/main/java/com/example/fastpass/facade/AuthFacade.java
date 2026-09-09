@@ -9,6 +9,7 @@ import com.example.fastpass.model.Usuario;
 import com.example.fastpass.repository.PasseRepository;
 import com.example.fastpass.service.UsuarioService;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional; // Importação adicionada
 
 import java.time.LocalDate;
 
@@ -39,12 +40,11 @@ public class AuthFacade {
         return usuario;
     }
 
+    @Transactional // Garante que se a criação do passe falhar, o usuário não seja salvo pela metade
     public Usuario cadastrar(String nome, String email, String cpf, String apelido, String senha) {
         Usuario usuario = usuarioService.cadastrar(nome, email, cpf, apelido, senha);
 
-        // NOVO: todo usuário cadastrado já ganha um Passe padrão (tipo
-        // COMUM, saldo zero, válido por 1 ano), automaticamente. Sem
-        // isso, a Home do app nunca teria dado nenhum pra mostrar
+
         Passe passePadrao = new Passe(
                 0.0,
                 LocalDate.now().plusYears(1),
@@ -52,7 +52,10 @@ public class AuthFacade {
                 TipoPasse.COMUM,
                 usuario
         );
-        passeRepository.save(passePadrao);
+
+        Passe passeSalvo = passeRepository.save(passePadrao);
+
+
 
         return usuario;
     }

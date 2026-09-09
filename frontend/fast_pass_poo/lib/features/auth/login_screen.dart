@@ -3,6 +3,7 @@ import 'auth_service.dart';
 import 'cadastro_screen.dart';
 import '../home/home_screen.dart';
 import '../dev/dev_menu_screen.dart';
+import 'package:fast_pass_poo/core/sessao_usuario.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -26,16 +27,29 @@ class _LoginScreenState extends State<LoginScreen> {
       _carregando = true;
       _erro = null;
     });
+
     try {
-      await AuthService.login(_apelidoController.text, _senhaController.text);
+      final resultado = await AuthService.login(
+        _apelidoController.text,
+        _senhaController.text,
+      );
+
+      SessaoUsuario.definirSessao(
+        resultado['usuarioId'],
+        resultado['nome'],
+      );
+
       if (!mounted) return;
+
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const HomeScreen()),
       );
     } catch (e) {
       setState(() => _erro = 'Credenciais inválidas. Tente novamente.');
     } finally {
-      if (mounted) setState(() => _carregando = false);
+      if (mounted) {
+        setState(() => _carregando = false);
+      }
     }
   }
 
@@ -65,7 +79,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(height: 4),
                   Text(
                     'Acesse seu passe digital',
-                    style: TextStyle(color: Colors.white70, fontSize: 15),
+                    style: TextStyle(
+                      color: Colors.white70,
+                      fontSize: 15,
+                    ),
                   ),
                 ],
               ),
@@ -76,31 +93,49 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   children: [
                     const SizedBox(height: 8),
+
                     // Ícone circular com a logo
                     Container(
                       width: 80,
                       height: 80,
                       padding: const EdgeInsets.all(16),
-                      decoration: const BoxDecoration(color:Colors.white, shape: BoxShape.circle),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
                       child: Image.asset(
                         'assets/icons/one.png',
                         fit: BoxFit.contain,
-                        
                         errorBuilder: (context, error, stackTrace) {
-                          return const Icon(Icons.inventory_2_outlined, color: Colors.white, size: 36);
+                          return const Icon(
+                            Icons.inventory_2_outlined,
+                            color: Colors.white,
+                            size: 36,
+                          );
                         },
                       ),
                     ),
+
                     const SizedBox(height: 16),
+
                     const Text(
                       'FastPass',
-                      style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
+
                     const SizedBox(height: 4),
+
                     Text(
                       'Entre para acessar seu passe',
-                      style: TextStyle(color: Colors.grey[600], fontSize: 15),
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 15,
+                      ),
                     ),
+
                     const SizedBox(height: 24),
 
                     // Card do formulário
@@ -110,7 +145,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: const Color(0xFFD0D7DE)),
+                        border: Border.all(
+                          color: const Color(0xFFD0D7DE),
+                        ),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.04),
@@ -123,7 +160,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _campoLabel('Apelido'),
+
                           const SizedBox(height: 6),
+
                           TextField(
                             controller: _apelidoController,
                             decoration: _decoracaoCampo(
@@ -131,9 +170,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               hint: 'anabeatriz',
                             ),
                           ),
+
                           const SizedBox(height: 16),
+
                           _campoLabel('Senha'),
+
                           const SizedBox(height: 6),
+
                           TextField(
                             controller: _senhaController,
                             obscureText: true,
@@ -142,16 +185,29 @@ class _LoginScreenState extends State<LoginScreen> {
                               hint: '••••••••',
                             ),
                           ),
+
                           const SizedBox(height: 6),
+
                           Text(
                             'Mínimo de 6 caracteres.',
-                            style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 12,
+                            ),
                           ),
+
                           if (_erro != null) ...[
                             const SizedBox(height: 12),
-                            Text(_erro!, style: const TextStyle(color: Colors.red)),
+                            Text(
+                              _erro!,
+                              style: const TextStyle(
+                                color: Colors.red,
+                              ),
+                            ),
                           ],
+
                           const SizedBox(height: 20),
+
                           SizedBox(
                             width: double.infinity,
                             height: 48,
@@ -166,31 +222,45 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               icon: _carregando
                                   ? const SizedBox(
-                                      height: 16,
-                                      width: 16,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        color: Colors.white,
-                                      ),
-                                    )
-                                  : const Icon(Icons.login, size: 18),
+                                height: 16,
+                                width: 16,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                                  : const Icon(
+                                Icons.login,
+                                size: 18,
+                              ),
                               label: const Text(
                                 'Entrar',
-                                style: TextStyle(fontWeight: FontWeight.w600),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
                           ),
                         ],
                       ),
                     ),
+
                     const SizedBox(height: 16),
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Ainda não tem conta? ', style: TextStyle(color: Colors.grey[700])),
+                        Text(
+                          'Ainda não tem conta? ',
+                          style: TextStyle(
+                            color: Colors.grey[700],
+                          ),
+                        ),
                         GestureDetector(
                           onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => const CadastroScreen()),
+                            MaterialPageRoute(
+                              builder: (_) => const CadastroScreen(),
+                            ),
                           ),
                           child: Text(
                             'Cadastre-se',
@@ -202,12 +272,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ],
                     ),
+
                     // remover antes da entrega — botão pra ver se as telas ficaram massa
                     TextButton(
                       onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const DevMenuScreen()),
+                        MaterialPageRoute(
+                          builder: (_) => const DevMenuScreen(),
+                        ),
                       ),
-                      child: const Text('[DEV] Ir para menu de telas'),
+                      child: const Text(
+                        '[DEV] Ir para menu de telas',
+                      ),
                     ),
                   ],
                 ),
@@ -229,31 +304,53 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         children: [
           TextSpan(text: texto),
-          const TextSpan(text: ' *', style: TextStyle(color: Colors.red)),
+          const TextSpan(
+            text: ' *',
+            style: TextStyle(color: Colors.red),
+          ),
         ],
       ),
     );
   }
 
-  InputDecoration _decoracaoCampo({required IconData icone, required String hint}) {
+  InputDecoration _decoracaoCampo({
+    required IconData icone,
+    required String hint,
+  }) {
     return InputDecoration(
-      prefixIcon: Icon(icone, color: Colors.grey[500], size: 20),
+      prefixIcon: Icon(
+        icone,
+        color: Colors.grey[500],
+        size: 20,
+      ),
       hintText: hint,
-      hintStyle: TextStyle(color: Colors.grey[400]),
+      hintStyle: TextStyle(
+        color: Colors.grey[400],
+      ),
       filled: true,
       fillColor: Colors.white,
-      contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+      contentPadding: const EdgeInsets.symmetric(
+        vertical: 14,
+        horizontal: 12,
+      ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(color: Color(0xFFD0D7DE)),
+        borderSide: const BorderSide(
+          color: Color(0xFFD0D7DE),
+        ),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(color: Color(0xFFD0D7DE)),
+        borderSide: const BorderSide(
+          color: Color(0xFFD0D7DE),
+        ),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(color: _azulHeader, width: 1.5),
+        borderSide: const BorderSide(
+          color: _azulHeader,
+          width: 1.5,
+        ),
       ),
     );
   }

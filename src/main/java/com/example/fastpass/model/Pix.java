@@ -16,11 +16,10 @@ public class Pix extends Pagamento {
         this.chavePix = chavePix;
     }
 
+
     @Override
     public boolean processarPagamento() {
-        // Pagamento via Pix simulado (fora de escopo integração real
-        // com gateway de pagamento, conforme especificação).
-        return chavePix != null && !chavePix.isBlank() && getValor() > 0;
+        return getValor() > 0;
     }
 
     public String getChavePix() {

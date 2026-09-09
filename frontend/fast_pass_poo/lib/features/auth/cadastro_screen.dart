@@ -38,6 +38,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
       Navigator.of(context).pop();
     } catch (e) {
       setState(() => _erro = 'Não foi possível cadastrar. Verifique os dados.');
+      print('ERRO NO CADASTRO: $e');
     } finally {
       if (mounted) setState(() => _carregando = false);
     }

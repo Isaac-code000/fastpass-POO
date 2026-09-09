@@ -17,6 +17,7 @@ import com.example.fastpass.model.Carteirinha;
 import com.example.fastpass.model.Passe;
 import com.example.fastpass.model.StatusPasse;
 import com.example.fastpass.model.TipoPasse;
+import com.example.fastpass.model.Usuario; // Importação adicionada
 import com.example.fastpass.service.CarteirinhaService;
 import com.example.fastpass.service.PasseService;
 
@@ -35,7 +36,10 @@ class PasseFacadeIntegrationTest {
     @Test
     @DisplayName("Deve permitir o uso do passe comum sem precisar de carteirinha")
     void devePermitirUsoDoPasseComumSemCarteirinha() {
-        Passe passeComum = new Passe(10.0, LocalDate.now().plusDays(10), StatusPasse.ATIVO, TipoPasse.COMUM);
+        Usuario usuarioMock = new Usuario(); // Usuário fictício para o construtor
+
+        // Adicionado usuarioMock como o 5º parâmetro
+        Passe passeComum = new Passe(10.0, LocalDate.now().plusDays(10), StatusPasse.ATIVO, TipoPasse.COMUM, usuarioMock);
         when(passeService.consultarPasse(1L)).thenReturn(passeComum);
 
         boolean podeUsar = passeFacade.validarUsoDoPasse(1L, null);
@@ -46,11 +50,18 @@ class PasseFacadeIntegrationTest {
     @Test
     @DisplayName("Deve lançar exceção ao tentar usar passe ESTUDANTIL com carteirinha inválida")
     void deveLancarExcecaoParaPasseEstudantilComCarteirinhaInvalida() {
-        Passe passeEstudantil = new Passe(10.0, LocalDate.now().plusDays(10), StatusPasse.ATIVO, TipoPasse.ESTUDANTIL);
-        Carteirinha carteirinhaVencida = new Carteirinha("12345", "UFAPE", LocalDate.now().minusDays(1));
+        Usuario usuarioMock = new Usuario(); // Usuário fictício para os construtores
+
+        // Adicionado usuarioMock como o 5º parâmetro
+        Passe passeEstudantil = new Passe(10.0, LocalDate.now().plusDays(10), StatusPasse.ATIVO, TipoPasse.ESTUDANTIL, usuarioMock);
+
+        // Ajustado o construtor da Carteirinha enviando uma String extra e o usuarioMock no final (totalizando 5 parâmetros)
+        Carteirinha carteirinhaVencida = new Carteirinha("12345", "UFAPE", "PENDENTE", LocalDate.now().minusDays(1), usuarioMock);
 
         when(passeService.consultarPasse(1L)).thenReturn(passeEstudantil);
-        when(carteirinhaService.isValidaParaTarifaEstudantil(carteirinhaVencida)).thenReturn(false);
+
+        // Alterado o nome do método de 'isValidaParaTarifaEstudantil' para 'validarParaTarifaEstudantil'
+        when(carteirinhaService.validarParaTarifaEstudantil(carteirinhaVencida)).thenReturn(false);
 
         assertThrows(CarteirinhaInvalidaException.class, () -> {
             passeFacade.validarUsoDoPasse(1L, carteirinhaVencida);
